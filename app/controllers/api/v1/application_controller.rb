@@ -1,7 +1,7 @@
 class Api::V1::ApplicationController < Api::ApplicationController
     RANSACK_DEFAULT_SORT = 'id ASC'
 
-    def build_meta(collection)
+      def build_meta(collection)
         {
           count: collection.count,
           total_count: collection.total_count,
@@ -22,5 +22,9 @@ class Api::V1::ApplicationController < Api::ApplicationController
       def per_page
         per = params.fetch(:per, 10).to_i
         per > 100 ? 100 : per
+      end
+
+      def self.responder
+        JsonResponder
       end
 end
