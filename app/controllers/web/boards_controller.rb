@@ -1,4 +1,6 @@
 class Web::BoardsController < Web::ApplicationController
   before_action :authenticate_user!
-  def show; end
+  def show
+    render(react_component: 'TaskBoard', props: {})
+  end
 end
