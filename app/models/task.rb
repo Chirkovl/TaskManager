@@ -24,12 +24,12 @@ class Task < ApplicationRecord
       transition in_qa: :in_code_review
     end
 
-    event :to_ready_to_release do
-      transition in_code_review: :ready_to_release
+    event :to_ready_for_release do
+      transition in_code_review: :ready_for_release
     end
 
     event :to_release do
-      transition ready_to_release: :released
+      transition ready_for_release: :released
     end
   end
 end
