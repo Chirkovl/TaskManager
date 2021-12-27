@@ -61,22 +61,6 @@ const TaskBoard = function () {
     });
   };
 
-  const handleCardDragEnd = (task, source, destination) => {
-    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
-    if (!transition) {
-      return null;
-    }
-  
-    return TasksRepository.update(task.id, { stateEvent: transition.event })
-      .then(() => {
-        loadColumnInitial(destination.toColumnId);
-        loadColumnInitial(source.fromColumnId);
-      })
-      .catch((error) => {
-        alert(`Move failed! ${error.message}`);
-      });
-  };
-
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
       setBoardCards((prevState) => {
@@ -92,6 +76,22 @@ const TaskBoard = function () {
     });
   };
 
+  const handleCardDragEnd = (task, source, destination) => {
+    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+    if (!transition) {
+      return null;
+    }
+
+    return TasksRepository.update(task.id, { stateEvent: transition.event })
+      .then(() => {
+        loadColumnInitial(destination.toColumnId);
+        loadColumnInitial(source.fromColumnId);
+      })
+      .catch((error) => {
+        alert(`Move failed! ${error.message}`);
+      });
+  };
+
   const handleOpenAddPopup = () => {
     setMode(MODES.ADD);
   };
@@ -100,7 +100,7 @@ const TaskBoard = function () {
     setOpenedTaskId(task.id);
     setMode(MODES.EDIT);
   };
-  
+
   const handleClose = () => {
     setMode(MODES.NONE);
     setOpenedTaskId(null);
@@ -114,9 +114,7 @@ const TaskBoard = function () {
     });
   };
 
-  const loadTask = (id) => {
-    return TasksRepository.show(id).then(({ data: { task } }) => task);
-  };
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
@@ -132,9 +130,7 @@ const TaskBoard = function () {
       loadColumnInitial(task.state);
       handleClose();
     });
-  }
-
-
+  };
 
   const generateBoard = () => {
     const board = {
@@ -157,7 +153,7 @@ const TaskBoard = function () {
   return (
     <div>
       <KanbanBoard
-        renderCard={card => <Task onClick={handleOpenEditPopup} task={card} />}
+        renderCard={(card) => <Task onClick={handleOpenEditPopup} task={card} />}
         renderColumnHeader={(column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />}
         onCardDragEnd={handleCardDragEnd}
       >
@@ -171,8 +167,8 @@ const TaskBoard = function () {
       {mode === MODES.EDIT && (
         <EditPopup
           onLoadCard={loadTask}
-          onDestroyCard={handleDstroyTask}
-          onUpdateCard={handleUpdateTask}
+          onDestroyCard={handleTaskDestroy}
+          onUpdateCard={handleTaskUpdate}
           onClose={handleClose}
           cardId={openedTaskId}
         />

@@ -10,7 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import useStyles from './useStyles.js';
 
-const Task = ({ onClick, task }) => {
+const Task = function ({ onClick, task }) {
   const styles = useStyles;
 
   const handleClick = () => onClick(task);
@@ -18,7 +18,7 @@ const Task = ({ onClick, task }) => {
     <IconButton onClick={handleClick}>
       <EditIcon />
     </IconButton>
-);
+  );
 
   return (
     <Card className={styles.root}>
@@ -34,6 +34,7 @@ const Task = ({ onClick, task }) => {
 
 Task.propTypes = {
   task: PropTypes.shape().isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Task;

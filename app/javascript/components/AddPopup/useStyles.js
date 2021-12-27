@@ -7,11 +7,11 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     outline: 0,
   },
-  
+
   root: {
     width: 465,
   },
-  
+
   actions: {
     display: 'flex',
     justifyContent: 'right',

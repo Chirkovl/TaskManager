@@ -14,11 +14,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-
-
 import useStyles from './useStyles';
 
-const EditPopup = ({ cardId, onClose, onCardDestroy, onLoadCard, onCardUpdate }) => {
+const EditPopup = function ({ cardId, onClose, onCardDestroy, onLoadCard, onCardUpdate }) {
   const [task, setTask] = useState(null);
   const [isSaving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
@@ -69,8 +67,8 @@ const EditPopup = ({ cardId, onClose, onCardDestroy, onLoadCard, onCardUpdate })
               <CircularProgress />
             </div>
           ) : (
-              <Form errors={errors} onChange={setTask} task={task} />
-            )}
+            <Form errors={errors} onChange={setTask} task={task} />
+          )}
         </CardContent>
         <CardActions className={styles.actions}>
           <Button
@@ -101,7 +99,7 @@ EditPopup.propTypes = {
   cardId: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   onCardDestroy: PropTypes.func.isRequired,
-  onCardLoad: PropTypes.func.isRequired,
+  onLoadCard: PropTypes.func.isRequired,
   onCardUpdate: PropTypes.func.isRequired,
 };
 
