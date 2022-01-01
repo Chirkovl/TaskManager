@@ -16,14 +16,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import useStyles from './useStyles';
 
-const EditPopup = function ({ cardId, onClose, onCardDestroy, onLoadCard, onCardUpdate }) {
+const EditPopup = function ({ cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate }) {
   const [task, setTask] = useState(null);
   const [isSaving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   const styles = useStyles();
 
   useEffect(() => {
-    onLoadCard(cardId).then(setTask);
+    onCardLoad(cardId).then(setTask);
   }, []);
 
   const handleCardUpdate = () => {
@@ -99,7 +99,7 @@ EditPopup.propTypes = {
   cardId: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   onCardDestroy: PropTypes.func.isRequired,
-  onLoadCard: PropTypes.func.isRequired,
+  onCardLoad: PropTypes.func.isRequired,
   onCardUpdate: PropTypes.func.isRequired,
 };
 
