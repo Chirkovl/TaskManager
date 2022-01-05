@@ -7,4 +7,5 @@ export default new PropTypesPresenter({
   description: PropTypes.string,
   author: PropTypes.object,
   assignee: PropTypes.object,
+  state: PropTypes.string,
 });

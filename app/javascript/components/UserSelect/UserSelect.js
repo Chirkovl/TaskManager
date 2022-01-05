@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import UserPresenter from 'presenters/UserPresenter';
 
 import InputLabel from '@material-ui/core/InputLabel';
 
@@ -25,8 +26,8 @@ const UserSelect = function ({ error, label, isClearable, isDisabled, isRequired
           cacheOptions
           loadOptions={handleLoadOptions}
           defaultOptions
-          getOptionLabel={(user) => `${user.firstName} ${user.lastName}`}
-          getOptionValue={(user) => user.id}
+          getOptionLabel={(user) => UserPresenter.fullName(user)}
+          getOptionValue={(user) => UserPresenter.id(user)}
           isDisabled={isDisabled}
           isClearable={isClearable}
           defaultValue={value}
@@ -49,7 +50,7 @@ UserSelect.propTypes = {
   isDisabled: PropTypes.bool,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func,
-  value: PropTypes.shape(),
+  value: UserPresenter.shape(),
   helperText: PropTypes.string,
 };
 
