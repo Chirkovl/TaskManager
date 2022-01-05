@@ -29,6 +29,7 @@ gem 'kaminari'
 gem 'ransack', github: 'activerecord-hackery/ransack'
 gem 'responders'
 gem 'active_model_serializers'
+gem 'js-routes', '~> 2.0.2'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
