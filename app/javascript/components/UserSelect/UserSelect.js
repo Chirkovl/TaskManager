@@ -49,7 +49,7 @@ UserSelect.propTypes = {
   isClearable: PropTypes.bool,
   isDisabled: PropTypes.bool,
   isRequired: PropTypes.bool,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
   value: UserPresenter.shape(),
   helperText: PropTypes.string,
 };
@@ -59,8 +59,7 @@ UserSelect.defaultProps = {
   isClearable: false,
   isDisabled: false,
   isRequired: false,
-  onChange: false,
-  value: {},
+  value: null,
   helperText: '',
 };
 
