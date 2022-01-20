@@ -8,7 +8,6 @@ import Task from 'components/Task';
 import AddPopup from 'components/AddPopup';
 import EditPopup from 'components/EditPopup';
 import ColumnHeader from 'components/ColumnHeader';
-import TasksRepository from 'repositories/TasksRepository';
 import TaskForm from 'forms/TaskForm';
 
 import TaskPresenter from 'presenters/TaskPresenter';
@@ -24,7 +23,8 @@ const MODES = {
 };
 
 const TaskBoard = function () {
-  const { board, loadBoard, loadColumn, loadColumnMore } = useTasks();
+  const { board, loadBoard, loadColumnMore, changeTaskState, loadTask, createTask, updateTask, destroyTask } =
+    useTasks();
   const [mode, setMode] = useState(MODES.NONE);
   const [openedTaskId, setOpenedTaskId] = useState(null);
   const styles = useStyles();
@@ -51,44 +51,20 @@ const TaskBoard = function () {
     loadColumnMore(state, page, perPage);
   };
 
-  const handleCardDragEnd = (task, source, destination) => {
-    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+  const handleCardDragEnd = (task, source, destination) => changeTaskState(task, source, destination);
 
-    if (!transition) {
-      return null;
-    }
-
-    return TasksRepository.update(task.id, { stateEvent: transition.event })
-      .then(() => {
-        loadColumn(destination.toColumnId);
-        loadColumn(source.fromColumnId);
-      })
-      .catch((error) => {
-        alert(`Moves failed! ${error.message}`);
-      });
-  };
   const handleTaskCreate = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
-    return TasksRepository.create(attributes).then(({ data: { task } }) => {
-      loadColumn(TaskPresenter.state(task));
-      handleClose();
-    });
+    return createTask(attributes).then(() => handleClose());
   };
-  const handleTaskLoad = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+  const handleTaskLoad = (id) => loadTask(id);
+
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
+    return updateTask(task, attributes).then(() => handleClose());
+  };
 
-    return TasksRepository.update(TaskPresenter.id(task), attributes).then(() => {
-      loadColumn(TaskPresenter.state(task));
-      handleClose();
-    });
-  };
-  const handleTaskDestroy = (task) => {
-    TasksRepository.destroy(TaskPresenter.id(task)).then(() => {
-      loadColumn(task.state);
-      handleClose();
-    });
-  };
+  const handleTaskDestroy = (task) => destroyTask(task).then(() => handleClose());
 
   return (
     <>

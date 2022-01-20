@@ -5,6 +5,8 @@ import { STATES } from 'presenters/TaskPresenter';
 import { useDispatch } from 'react-redux';
 import { changeColumn } from '@asseinfo/react-kanban';
 
+import TaskPresenter from 'presenters/TaskPresenter';
+
 const initialState = {
   board: {
     columns: STATES.map((column) => ({
@@ -72,11 +74,50 @@ export const useTasksActions = () => {
     });
   };
 
+  const changeTaskState = (task, source, destination) => {
+    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+
+    if (!transition) {
+      return null;
+    }
+
+    return TasksRepository.update(task.id, { stateEvent: transition.event })
+      .then(() => {
+        loadColumn(destination.toColumnId);
+        loadColumn(source.fromColumnId);
+      })
+      .catch((error) => {
+        alert(`Moves failed! ${error.message}`);
+      });
+  };
+
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+
+  const createTask = (params) =>
+    TasksRepository.create(params).then(({ data: { task } }) => {
+      loadColumn(TaskPresenter.state(task));
+    });
+
+  const updateTask = (task, params) =>
+    TasksRepository.update(TaskPresenter.id(task), params).then(() => {
+      loadColumn(TaskPresenter.state(task));
+    });
+
+  const destroyTask = (task) =>
+    TasksRepository.destroy(task.id).then(() => {
+      loadColumn(TaskPresenter.state(task));
+    });
+
   const loadBoard = () => STATES.map(({ key }) => loadColumn(key));
 
   return {
     loadBoard,
     loadColumn,
     loadColumnMore,
+    changeTaskState,
+    loadTask,
+    createTask,
+    updateTask,
+    destroyTask,
   };
 };
